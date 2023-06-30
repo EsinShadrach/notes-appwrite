@@ -192,13 +192,13 @@ class _HomePageState extends State<HomePage> {
                       String email = _emailController.text;
                       String password = _passwordController.text;
                       String name = _nameController.text;
+                      if (_formKey.currentState!.validate()) {
                         authProvider.signUp(
                           email: email,
                           password: password,
                           name: name,
                           context: context,
                         );
-                      if (_formKey.currentState!.validate()) {
                       }
                     },
                     icon: const Icon(Icons.login_rounded),
