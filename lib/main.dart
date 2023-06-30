@@ -82,6 +82,16 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 30),
+                  child: Text(
+                    "Register",
+                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
                 TextFormField(
                   controller: _nameController,
                   keyboardType: TextInputType.name,
@@ -98,7 +108,9 @@ class _HomePageState extends State<HomePage> {
                     prefixIcon: Icon(Icons.person_rounded),
                   ),
                 ),
-                const SizedBox(height: 15,),
+                const SizedBox(
+                  height: 15,
+                ),
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -180,23 +192,14 @@ class _HomePageState extends State<HomePage> {
                       String email = _emailController.text;
                       String password = _passwordController.text;
                       String name = _nameController.text;
-
-                      if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Text("Signing in"),
-                            showCloseIcon: true,
-                            behavior: SnackBarBehavior.floating,
-                            margin: EdgeInsets.all(5),
-                          ),
+                        authProvider.signUp(
+                          email: email,
+                          password: password,
+                          name: name,
+                          context: context,
                         );
+                      if (_formKey.currentState!.validate()) {
                       }
-                      authProvider.signUp(
-                        email: email,
-                        password: password,
-                        name: name,
-                      );
                     },
                     icon: const Icon(Icons.login_rounded),
                     label: const Text("Sign Up"),
