@@ -93,7 +93,9 @@ class _SignUpState extends State<SignUp> {
           AuthRedirects(
             text1: "Already have an account? ",
             text2: "Sign-in",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/');
+            },
           )
         ],
       ),

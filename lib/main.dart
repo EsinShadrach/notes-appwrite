@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_appwrite/auth_pages/sign_in.dart';
+import 'package:notes_appwrite/auth_pages/sign_up.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_api/auth_api.dart';
@@ -16,6 +17,10 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AuthenticateProvider(),
       child: MaterialApp(
+        routes: {
+          '/': (context) => const AuthContainer(child: SignIn()),
+          '/sign-up': (context) => const AuthContainer(child: SignUp()),
+        },
         title: "Note Appwrite",
         theme: ThemeData(
           colorSchemeSeed: Colors.indigo,
@@ -31,21 +36,23 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.system,
-        home: const HomePage(),
+        // home: const AuthContainer(
+        //   child: ,
+        // ),
       ),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AuthContainer extends StatefulWidget {
+  const AuthContainer({super.key, required this.child});
 
+  final Widget child;
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AuthContainer> createState() => _AuthContainerState();
 }
 
-class _HomePageState extends State<HomePage> {
-  
+class _AuthContainerState extends State<AuthContainer> {
   @override
   Widget build(BuildContext context) {
     // final authProvider = Provider.of<AuthenticateProvider>(context);
@@ -56,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           constraints: const BoxConstraints(
             maxWidth: 450,
           ),
-          child: const SignIn(),
+          child: widget.child,
         ),
       ),
     );

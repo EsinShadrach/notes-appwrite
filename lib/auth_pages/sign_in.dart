@@ -80,8 +80,10 @@ class _SignInState extends State<SignIn> {
           ),
           AuthRedirects(
             text1: "Don't have an account? ",
-            text2: "Login",
-            onPressed: () {},
+            text2: "Register",
+            onPressed: () {
+              Navigator.pushNamed(context, '/sign-up');
+            },
           )
         ],
       ),
