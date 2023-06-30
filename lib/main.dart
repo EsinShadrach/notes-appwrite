@@ -205,6 +205,27 @@ class _HomePageState extends State<HomePage> {
                     label: const Text("Sign Up"),
                   ),
                 ),
+                TextButton(
+                  onPressed: () {},
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      children: [
+                        const TextSpan(
+                          text: "Already have an account? ",
+                        ),
+                        TextSpan(
+                          text: 'Sign-in',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
