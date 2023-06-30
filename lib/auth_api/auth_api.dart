@@ -24,17 +24,27 @@ class AuthenticateProvider extends ChangeNotifier {
       );
       print(response);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account Created successfully!')),
+        const SnackBar(
+          content: Text('Account Created successfully!'),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(10),
+        ),
       );
     } on AppwriteException catch (e) {
       if (e.type == "user_already_exists") {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User already Exists!')),
+          const SnackBar(
+            content: Text('User already Exists!'),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(10),
+          ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Error occurred during sign up. Please try again.'),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(10),
           ),
         );
       }
@@ -43,5 +53,47 @@ class AuthenticateProvider extends ChangeNotifier {
       // Handle error
     }
     notifyListeners();
+  }
+
+  Future<void> signIn({
+    required String email,
+    required String password,
+    required BuildContext? context,
+  }) async {
+    final account = Account(client);
+    try {
+      final response = await account.createEmailSession(
+        email: email,
+        password: password,
+      );
+      print(response.countryName);
+      ScaffoldMessenger.of(context!).showSnackBar(
+        const SnackBar(
+          content: Text("Sign In Successful"),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(10),
+        ),
+      );
+    } on AppwriteException catch (e) {
+      if (e.type == "user_invalid_credentials") {
+        ScaffoldMessenger.of(context!).showSnackBar(
+          const SnackBar(
+            content: Text("Invalid Password Or Email"),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(10),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context!).showSnackBar(
+          const SnackBar(
+            content: Text("Sign in Failed, Try again Later."),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(10),
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
