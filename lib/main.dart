@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_appwrite/auth_pages/sign_in.dart';
 import 'package:notes_appwrite/auth_pages/sign_up.dart';
+import 'package:notes_appwrite/homepage.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_api/auth_api.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const AuthContainer(child: SignIn()),
           '/sign-up': (context) => const AuthContainer(child: SignUp()),
+          '/homepage': (context) => const Homepage(),
         },
         title: "Note Appwrite",
         theme: ThemeData(

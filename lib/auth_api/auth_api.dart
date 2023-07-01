@@ -8,6 +8,8 @@ class AuthenticateProvider extends ChangeNotifier {
     ..setEndpoint('https://cloud.appwrite.io/v1')
     ..setProject('649df74ca17a3e033b4c');
 
+  String username = '';
+
   Future<void> signUp({
     required String email,
     required String password,
@@ -30,10 +32,9 @@ class AuthenticateProvider extends ChangeNotifier {
           margin: EdgeInsets.all(10),
         ),
       );
-
-      if (!response.emailVerification) {
-        await verifyMail(context: context);
-      }
+      // if (!response.emailVerification) {
+      //   await verifyMail(context: context);
+      // }
     } on AppwriteException catch (e) {
       if (e.type == "user_already_exists") {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -62,7 +63,7 @@ class AuthenticateProvider extends ChangeNotifier {
   Future<void> signIn({
     required String email,
     required String password,
-    required BuildContext? context,
+    required context,
   }) async {
     final account = Account(client);
     try {
@@ -78,6 +79,8 @@ class AuthenticateProvider extends ChangeNotifier {
           margin: EdgeInsets.all(10),
         ),
       );
+      getCurrentUser();
+      Navigator.of(context).pushNamed('/homepage');
     } on AppwriteException catch (e) {
       if (e.type == "user_invalid_credentials") {
         ScaffoldMessenger.of(context!).showSnackBar(
@@ -105,9 +108,8 @@ class AuthenticateProvider extends ChangeNotifier {
     Account account = Account(client);
     String url = 'https://cloud.appwrite.io/v1';
     try {
-      await account.createVerification(url: url).then((value) =>
-          print(
-              "THIS IS USER_ID:${value.userId}\nTHIS IS SECRETS:${value.secret}"));
+      await account.createVerification(url: url).then((value) => print(
+          "THIS IS USER_ID:${value.userId}\nTHIS IS SECRETS:${value.secret}"));
       // final sendVerification = await account.updateVerification(
       //   userId: response.userId,
       //   secret: response.secret,
@@ -137,5 +139,23 @@ class AuthenticateProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> getCurrentUser() async {
+    Account account = Account(client);
+    try {
+      final response = await account.get();
+      final userId = response.name;
+      final presentUserName = response.name;
+      print('User ID: $userId');
+      print('Email: $presentUserName');
+
+      username = presentUserName;
+    } on AppwriteException catch (e) {
+      print('Error getting user data: ${e.message}');
+    } catch (e) {
+      print('Error getting user data: $e');
+    }
+    notifyListeners();
   }
 }
