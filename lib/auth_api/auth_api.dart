@@ -30,6 +30,10 @@ class AuthenticateProvider extends ChangeNotifier {
           margin: EdgeInsets.all(10),
         ),
       );
+
+      if (!response.emailVerification) {
+        await verifyMail(context: context);
+      }
     } on AppwriteException catch (e) {
       if (e.type == "user_already_exists") {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -92,6 +96,44 @@ class AuthenticateProvider extends ChangeNotifier {
           ),
         );
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> verifyMail({required BuildContext? context}) async {
+    Account account = Account(client);
+    String url = 'https://cloud.appwrite.io/v1';
+    try {
+      await account.createVerification(url: url).then((value) =>
+          print(
+              "THIS IS USER_ID:${value.userId}\nTHIS IS SECRETS:${value.secret}"));
+      // final sendVerification = await account.updateVerification(
+      //   userId: response.userId,
+      //   secret: response.secret,
+      // );
+      ScaffoldMessenger.of(context!).showSnackBar(
+        const SnackBar(
+          content: Text('Verification Email Sent successfully!'),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(10),
+        ),
+      );
+      // print(sendVerification.secret);
+    } on AppwriteException catch (e) {
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.redAccent[100],
+          content: Text(
+            // 'Account Created successfully!',
+            '${e.message}',
+            style: const TextStyle(color: Colors.white),
+          ),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(10),
+        ),
+      );
+      print(e.message);
     } catch (e) {
       print(e);
     }
